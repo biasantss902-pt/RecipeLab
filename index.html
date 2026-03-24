@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Descubra receitas incríveis do mundo todo. Busque por ingrediente ou nome e salve seus favoritos."
+    />
+    <title>RecipeLab — Descubra o Mundo Pelos Sabores</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="header-inner container">
+        <a href="#" class="logo" aria-label="RecipeLab — página inicial">
+          <span class="logo-icon">🍳</span>
+          <span class="logo-text">Recipe<strong>Lab</strong></span>
+        </a>
+
+        <nav class="header-nav" aria-label="Navegação principal">
+          <button
+            class="nav-btn nav-btn--active"
+            id="btn-explore"
+            aria-pressed="true"
+          >
+            Explorar
+          </button>
+          <button class="nav-btn" id="btn-favorites" aria-pressed="false">
+            Favoritos
+            <span
+              class="favorites-badge"
+              id="favorites-badge"
+              aria-live="polite"
+              >0</span
+            >
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="section-explore">
+      <div class="hero-bg-decoration" aria-hidden="true">
+        <span class="decoration-circle decoration-circle--1"></span>
+        <span class="decoration-circle decoration-circle--2"></span>
+        <span class="decoration-dot-grid"></span>
+      </div>
+
+      <div class="container hero-content">
+        <p class="hero-eyebrow">✦ Mais de 300 receitas do mundo todo</p>
+        <h1 class="hero-title">
+          Descubra o mundo<br />
+          <em>pelos sabores</em>
+        </h1>
+        <p class="hero-subtitle">
+          Busque por qualquer ingrediente ou nome de prato e encontre receitas
+          incríveis para cozinhar agora.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="search-wrapper" role="search">
+          <label for="search-input" class="sr-only">Buscar receitas</label>
+          <div class="search-bar">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="Ex: frango, massa, chocolate..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="search-btn" id="search-btn" aria-label="Buscar">
+              Buscar
+            </button>
+          </div>
+          <p class="search-hint" id="search-hint" aria-live="polite"></p>
+        </div>
+
+        <!-- Category Pills -->
+        <div
+          class="category-pills"
+          role="group"
+          aria-label="Categorias rápidas"
+        >
+          <span class="pills-label">Explore:</span>
+          <button class="pill" data-search="chicken">🍗 Frango</button>
+          <button class="pill" data-search="pasta">🍝 Massas</button>
+          <button class="pill" data-search="chocolate">🍫 Sobremesas</button>
+          <button class="pill" data-search="seafood">🦐 Frutos do Mar</button>
+          <button class="pill" data-search="beef">🥩 Carnes</button>
+          <button class="pill" data-search="vegetarian">🥗 Vegano</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content container">
+      <!-- Estado: Loading -->
+      <div
+        class="state-container state-loading hidden"
+        id="state-loading"
+        aria-live="polite"
+        aria-label="Carregando receitas"
+      >
+        <div class="loading-grid">
+          <div class="skeleton-card" aria-hidden="true"></div>
+          <div class="skeleton-card" aria-hidden="true"></div>
+          <div class="skeleton-card" aria-hidden="true"></div>
+          <div class="skeleton-card" aria-hidden="true"></div>
+          <div class="skeleton-card" aria-hidden="true"></div>
+          <div class="skeleton-card" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- Estado: Erro -->
+      <div
+        class="state-container state-error hidden"
+        id="state-error"
+        role="alert"
+      >
+        <div class="state-icon">⚠️</div>
+        <h2 class="state-title">Ops! Algo deu errado</h2>
+        <p class="state-message" id="error-message">
+          Não conseguimos buscar as receitas agora.
+        </p>
+        <button class="retry-btn" id="retry-btn">Tentar novamente</button>
+      </div>
+
+      <!-- Estado: Sem resultados -->
+      <div
+        class="state-container state-empty hidden"
+        id="state-empty"
+        role="status"
+      >
+        <div class="state-icon">🥣</div>
+        <h2 class="state-title">Nenhuma receita encontrada</h2>
+        <p class="state-message">Tente outro ingrediente ou nome de prato.</p>
+      </div>
+
+      <!-- Estado: Favoritos vazios -->
+      <div
+        class="state-container state-no-favorites hidden"
+        id="state-no-favorites"
+        role="status"
+      >
+        <div class="state-icon">🤍</div>
+        <h2 class="state-title">Nenhum favorito ainda</h2>
+        <p class="state-message">
+          Explore receitas e clique no coração para salvar seus favoritos.
+        </p>
+        <button class="retry-btn" id="go-explore-btn">Explorar receitas</button>
+      </div>
+
+      <!-- Estado: Inicial (Tela de boas-vindas) -->
+      <div
+        class="state-container state-welcome"
+        id="state-welcome"
+        role="status"
+      >
+        <div class="state-icon">👨‍🍳</div>
+        <h2 class="state-title">O que vamos cozinhar hoje?</h2>
+        <p class="state-message">
+          Use a busca acima ou clique em uma categoria para começar a explorar.
+        </p>
+      </div>
+
+      <!-- Results Header -->
+      <div class="results-header hidden" id="results-header">
+        <p class="results-count" id="results-count" aria-live="polite"></p>
+        <div class="results-actions">
+          <button class="sort-btn active" id="sort-default" data-sort="default">
+            Relevância
+          </button>
+          <button class="sort-btn" id="sort-alpha" data-sort="alpha">
+            A–Z
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div
+        class="recipes-grid"
+        id="recipes-grid"
+        role="list"
+        aria-label="Lista de receitas"
+      ></div>
+    </main>
+
+    <!-- ===== MODAL DE RECEITA ===== -->
+    <div
+      class="modal-overlay hidden"
+      id="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div class="modal" id="modal">
+        <button
+          class="modal-close"
+          id="modal-close"
+          aria-label="Fechar receita"
+        >
+          ✕
+        </button>
+
+        <div class="modal-image-wrapper">
+          <img
+            class="modal-image"
+            id="modal-image"
+            src=""
+            alt=""
+            loading="lazy"
+          />
+          <div class="modal-image-overlay" aria-hidden="true"></div>
+          <button
+            class="modal-favorite-btn"
+            id="modal-favorite-btn"
+            aria-label="Adicionar aos favoritos"
+          >
+            🤍
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="modal-meta">
+            <span class="modal-category" id="modal-category"></span>
+            <span class="modal-area" id="modal-area"></span>
+          </div>
+
+          <h2 class="modal-title" id="modal-title"></h2>
+
+          <div class="modal-tabs" role="tablist" aria-label="Seções da receita">
+            <button
+              class="tab-btn tab-btn--active"
+              role="tab"
+              aria-selected="true"
+              data-tab="ingredients"
+              aria-controls="tab-ingredients"
+            >
+              Ingredientes
+            </button>
+            <button
+              class="tab-btn"
+              role="tab"
+              aria-selected="false"
+              data-tab="instructions"
+              aria-controls="tab-instructions"
+            >
+              Modo de Preparo
+            </button>
+          </div>
+
+          <div class="tab-content" id="tab-ingredients" role="tabpanel">
+            <ul class="ingredients-list" id="modal-ingredients"></ul>
+          </div>
+
+          <div class="tab-content hidden" id="tab-instructions" role="tabpanel">
+            <div class="instructions-text" id="modal-instructions"></div>
+          </div>
+
+          <div class="modal-footer">
+            <a
+              class="youtube-btn hidden"
+              id="modal-youtube"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Assistir receita no YouTube"
+            >
+              ▶ Ver no YouTube
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TOAST NOTIFICATION ===== -->
+    <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>
+          Feito com ❤️ usando
+          <a href="https://www.themealdb.com/" target="_blank" rel="noopener"
+            >TheMealDB API</a
+          >
+        </p>
+        <p class="footer-credit">
+          Projeto de portfólio — HTML, CSS & JavaScript puro
+        </p>
+      </div>
+    </footer>
+
+    <!-- Scripts (defer = carrega sem travar o HTML) -->
+    <script src="js/api.js" defer></script>
+    <script src="js/favorites.js" defer></script>
+    <script src="js/ui.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
