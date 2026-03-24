@@ -6,7 +6,7 @@
 
 ## 🖥️ Demo
 
-> Acesse: [seu-link-aqui.github.io/recipe-finder](https://seu-link-aqui.github.io/recipe-finder)
+> Acesse: [https://github.com/biasantss902-pt/RecipeLab.git](https://github.com/biasantss902-pt/RecipeLab.git)
 
 ---
 
@@ -62,7 +62,7 @@ recipe-finder/
 ## 🚀 Como rodar localmente
 
 ```bash
-git clone https://github.com/SEU_USUARIO/recipe-finder.git
+git clone https://github.com/biasantss902-pt/RecipeLab.git
 cd recipe-finder
 # Abra o index.html no browser — sem dependências, sem build
 ```
